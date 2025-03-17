@@ -15,4 +15,7 @@ public class BaseTest {
                         "token","ATTA98a6b05484cb89c3777111af6cf67f9a5f46e24fbccee3c82512431e5646912e75406C2B"))
                 .header("Accept","application/json");
     }
+    protected static RequestSpecification requestWithoutAuth(){
+        return RestAssured.given();
+    }
 }

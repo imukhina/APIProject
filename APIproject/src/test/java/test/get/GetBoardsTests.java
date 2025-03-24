@@ -1,31 +1,39 @@
+package test.get;
+
 import io.restassured.module.jsv.JsonSchemaValidator;
 import org.junit.jupiter.api.Test;
+import test.BaseTest;
+
+import static constants.BoardsEndpoints.GET_ALL_BOARDS_URL;
+import static constants.BoardsEndpoints.GET_BOARD_URL;
+import static constants.UrlParamValues.EXISTING_BOARD_ID;
+import static constants.UrlParamValues.USER_NAME;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.lessThan;
 
-public class GetBoardsTests extends BaseTest{
+public class GetBoardsTests extends BaseTest {
 
     @Test
-    public void CheckGetBoards()
+    public void checkGetBoards()
     {
-            requestWithAuth()
+            BaseTest.requestWithAuth()
                 .log().all()
-                .pathParam("id","iraanischenko")
-                .get("/members/{id}/boards")
+                .pathParam("id",USER_NAME)
+                .get(GET_ALL_BOARDS_URL)
                 .then()
                 .statusCode(200)
                 .time(lessThan(1000L))
                 .log().body();
-
     }
+
     @Test
-    public void CheckGetBoard()
+    public void checkGetBoard()
     {
-            requestWithAuth()
+            BaseTest.requestWithAuth()
                 .log().all()
-                .pathParam("id","67b33f0fef35108b71345e56")
+                .pathParam("id",EXISTING_BOARD_ID)
                     .queryParams("fields", "id,name")
-                .get("/boards/{id}")
+                .get(GET_BOARD_URL)
                 .then()
                 .statusCode(200)
                 .body("name", equalTo("проспро"))

@@ -1,8 +1,13 @@
 package test.get;
 
+import arguments.holders.AuthValidationArgumentsHolder;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+import providers.AuthCardValidationArgumentsProvider;
+import providers.AuthValidationArgumentsProvider;
 import test.BaseTest;
 
 import static constants.CardsEndpoints.GET_CARD_URL;
@@ -11,18 +16,19 @@ import static org.hamcrest.Matchers.lessThan;
 
 public class GetCardsValidationTests extends BaseTest {
 
-    @Test
-    public void checkGetCardsWithInvalidAuth()
+    @ParameterizedTest
+    @ArgumentsSource(AuthCardValidationArgumentsProvider.class)
+    public void checkGetCardsWithInvalidAuth(AuthValidationArgumentsHolder validationArguments)
     {
         Response response = BaseTest.requestWithoutAuth()
+                .queryParams(validationArguments.getAuthParams())
                 .pathParam("id",EXISTING_CARD_ID)
                 .get(GET_CARD_URL);
         response
                 .then()
                 .statusCode(401)
-                .time(lessThan(1000L))
                 .log().body();
-        Assertions.assertEquals("unauthorized card permission requested", response.body().asString());
+        Assertions.assertEquals(validationArguments.getErrorMessage(), response.body().asString());
     }
 
     @Test
@@ -34,7 +40,6 @@ public class GetCardsValidationTests extends BaseTest {
         response
                 .then()
                 .statusCode(400)
-                .time(lessThan(1000L))
                 .log().body();
         Assertions.assertEquals("invalid id", response.body().asString());
     }

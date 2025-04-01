@@ -1,8 +1,12 @@
 package test.get;
 
+import arguments.holders.AuthValidationArgumentsHolder;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+import providers.AuthValidationArgumentsProvider;
 import test.BaseTest;
 
 import static constants.BoardsEndpoints.GET_BOARD_URL;
@@ -11,10 +15,12 @@ import static org.hamcrest.Matchers.lessThan;
 
 public class GetBoardsValidationTests extends BaseTest {
 
-    @Test
-    public void checkGetBoardsWithInvalidAuth()
+    @ParameterizedTest
+    @ArgumentsSource(AuthValidationArgumentsProvider.class)
+    public void checkGetBoardsWithInvalidAuth(AuthValidationArgumentsHolder validationArguments)
     {
         Response response = BaseTest.requestWithoutAuth()
+                .queryParams(validationArguments.getAuthParams())
                 .pathParam("id",EXISTING_BOARD_ID)
                 .get(GET_BOARD_URL);
         response
@@ -22,7 +28,7 @@ public class GetBoardsValidationTests extends BaseTest {
                 .statusCode(401)
                 .time(lessThan(1000L))
                 .log().body();
-        Assertions.assertEquals("unauthorized permission requested", response.body().asString());
+        Assertions.assertEquals(validationArguments.getErrorMessage(), response.body().asString());
     }
 
     @Test

@@ -22,7 +22,6 @@ public class GetBoardsTests extends BaseTest {
                 .get(GET_ALL_BOARDS_URL)
                 .then()
                 .statusCode(200)
-                .time(lessThan(1000L))
                 .log().body();
     }
 

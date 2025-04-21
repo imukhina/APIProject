@@ -28,6 +28,7 @@ public class GetCardsTests extends BaseTest {
         BaseTest.requestWithAuth()
                 .log().all()
                 .pathParam("id","67b33f1072bfba7883b51d70")
+                .queryParam("fields","name")
                 .get(GET_ALL_CARDS_URL)
                 .then()
                 .statusCode(200)

@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static constants.BoardsEndpoints.*;
 import static constants.UrlParamValues.EXISTING_BOARD_ID;
+import static constants.UrlParamValues.USER_NAME;
 import static org.hamcrest.Matchers.equalTo;
 
 public class CreateBoardTest extends BaseTest {
@@ -33,6 +34,13 @@ private String createBoardId;
                 .then()
                 .statusCode(200)
                 .body("name", Matchers.equalTo(boardName));
+        requestWithAuth()
+                .log().all()
+                .pathParam("id",USER_NAME)
+                .get(GET_ALL_BOARDS_URL)
+                .then()
+                .statusCode(200)
+                .body("name",Matchers.hasItem(boardName));
     }
 
 @AfterEach

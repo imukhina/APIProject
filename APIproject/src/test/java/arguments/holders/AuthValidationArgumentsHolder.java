@@ -12,11 +12,12 @@ public class AuthValidationArgumentsHolder {
         this.errorMessage = errorMessage;
     }
 
-    public Map<String, String> getAuthParams() {
+    public Map<String, String> getAuthParams(){
         return authParams;
     }
 
-    public String getErrorMessage() {
+    public String getErrorMessage(){
         return errorMessage;
     }
 }
+

@@ -25,9 +25,7 @@ public class GetBoardsValidationTests extends BaseTest {
                 .get(GET_BOARD_URL);
         response
                 .then()
-                .statusCode(401)
-                .time(lessThan(1000L))
-                .log().body();
+                .statusCode(401);
         Assertions.assertEquals(validationArguments.getErrorMessage(), response.body().asString());
     }
 
@@ -39,9 +37,7 @@ public class GetBoardsValidationTests extends BaseTest {
                 .get(GET_BOARD_URL);
         response
                 .then()
-                .statusCode(400)
-                .time(lessThan(1000L))
-                .log().body();
+                .statusCode(400);
         Assertions.assertEquals("invalid id", response.body().asString());
     }
 

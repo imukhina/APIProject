@@ -1,4 +1,4 @@
-package test.put;
+package test.delete;
 
 import arguments.holders.AuthValidationArgumentsHolder;
 import arguments.holders.CardIdValidationArgumentsHolder;
@@ -10,35 +10,33 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import providers.AuthCardValidationScopeArgumentsProvider;
 import providers.CardIdValidationArgumentProvider;
 import test.BaseTest;
-import java.util.Map;
-import static constants.CardsEndpoints.UPDATE_CARD_URL;
-import static constants.UrlParamValues.CARD_ID_TO_UPDATE;
+import static constants.CardsEndpoints.DELETE_CARD_URL;
+import static constants.UrlParamValues.EXISTING_CARD_ID;
 
-public class UpdateCardValidationTest  extends BaseTest {
+public class DeleteCardValidationTest extends BaseTest {
 
     @ParameterizedTest
     @ArgumentsSource(AuthCardValidationScopeArgumentsProvider.class)
-    public void checkUpdateCardWithInvalidAuth(AuthValidationArgumentsHolder validationArguments)
+    public void checkDeleteCardWithInvalidAuth(AuthValidationArgumentsHolder validationArguments)
     {
         Response response = BaseTest.requestWithoutAuth()
                 .queryParams(validationArguments.getAuthParams())
-                .pathParam("id",CARD_ID_TO_UPDATE)
-                .body(Map.of("name", "cardName1"))
+                .pathParam("id",EXISTING_CARD_ID)
                 .contentType(ContentType.JSON)
-                .put(UPDATE_CARD_URL);
+                .delete(DELETE_CARD_URL);
         response
                 .then()
-                .statusCode(401)
-                .log().body();
+                .statusCode(401);
         Assertions.assertEquals(validationArguments.getErrorMessage(), response.body().asString());
     }
+
     @ParameterizedTest
     @ArgumentsSource(CardIdValidationArgumentProvider.class)
-    public void checkUpdateCardWithInvalidId(CardIdValidationArgumentsHolder validationArguments)
+    public void checkDeleteCardWithInvalidId(CardIdValidationArgumentsHolder validationArguments)
     {
         Response response = BaseTest.requestWithAuth()
                 .pathParams(validationArguments.getPathParams())
-                .put(UPDATE_CARD_URL);
+                .delete(DELETE_CARD_URL);
         response
                 .then()
                 .statusCode(validationArguments.getStatusCode());

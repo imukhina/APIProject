@@ -16,11 +16,11 @@ public class DeleteBoardValidationTest extends BaseTest {
 
     @ParameterizedTest
     @ArgumentsSource(AuthValidationArgumentsProvider.class)
-    public void checkDeleteBoardsWithInvalidAuth(AuthValidationArgumentsHolder validationArguments)
+    public void checkDeleteBoardWithInvalidAuth(AuthValidationArgumentsHolder validationArguments)
     {
-        Response response = BaseTest.requestWithoutAuth()
+        Response response = requestWithoutAuth()
                 .queryParams(validationArguments.getAuthParams())
-                .pathParam("id",EXISTING_BOARD_ID)
+                .pathParam("id", EXISTING_BOARD_ID)
                 .delete(DELETE_BOARD_URL);
         response
                 .then()
@@ -32,7 +32,7 @@ public class DeleteBoardValidationTest extends BaseTest {
     @ArgumentsSource(BoardIdValidationArgumentsProvider.class)
     public void checkDeleteBoardWithInvalidId(BoardIdValidationArgumentsHolder validationArguments)
     {
-        Response response = BaseTest.requestWithAuth()
+        Response response = requestWithAuth()
                 .pathParams(validationArguments.getPathParams())
                 .delete(DELETE_BOARD_URL);
         response
@@ -40,5 +40,4 @@ public class DeleteBoardValidationTest extends BaseTest {
                 .statusCode(validationArguments.getStatusCode());
         Assertions.assertEquals(validationArguments.getErrorMessage(), response.body().asString());
     }
-
 }

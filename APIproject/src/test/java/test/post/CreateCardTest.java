@@ -20,7 +20,7 @@ public class CreateCardTest extends BaseTest {
     public void checkCreateCard()
     {
         String cardName = "FirstCard"+ LocalDateTime.now();
-        Response response = BaseTest.requestWithAuth()
+        Response response = requestWithAuth()
                 .body(Map.of(
                         "idList", EXISTING_LIST_ID,
                         "name", cardName))
@@ -40,8 +40,8 @@ public class CreateCardTest extends BaseTest {
     }
 
     @AfterEach
-    public void deleteCreateCard(){
-        BaseTest.requestWithAuth()
+        public void deleteCreateCard(){
+            requestWithAuth()
                 .pathParam("id", createdCardId)
                 .delete(DELETE_CARD_URL)
                 .then()

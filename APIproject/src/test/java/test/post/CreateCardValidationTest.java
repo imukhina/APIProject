@@ -20,7 +20,7 @@ public class CreateCardValidationTest extends BaseTest {
     @ArgumentsSource(AuthCardValidationArgumentsProvider.class)
     public void checkCreateCardWithInvalidAuth(AuthValidationArgumentsHolder validationArguments)
     {
-        Response response = BaseTest.requestWithoutAuth()
+        Response response = requestWithoutAuth()
                 .queryParams(validationArguments.getAuthParams())
                 .body(Map.of(
                         "idList", EXISTING_LIST_ID,
@@ -29,8 +29,7 @@ public class CreateCardValidationTest extends BaseTest {
                 .post(CREATE_CARD_URL);
         response
                 .then()
-                .statusCode(401)
-                .log().body();
+                .statusCode(401);
         Assertions.assertEquals(validationArguments.getErrorMessage(), response.body().asString());
     }
 
@@ -38,14 +37,13 @@ public class CreateCardValidationTest extends BaseTest {
     @ArgumentsSource(CardNameValidationArgumentsProvider.class)
     public void checkCreateCardWithInvalidName(CardBodyArgumentsHolder bodyParams)
     {
-        Response response = BaseTest.requestWithoutAuth()
+        Response response = requestWithoutAuth()
                 .body(bodyParams)
                 .contentType(ContentType.JSON)
                 .post(CREATE_CARD_URL);
         response
                 .then()
-                .statusCode(400)
-                .log().body();
+                .statusCode(400);
         Assertions.assertEquals(bodyParams.getErrorMessage(),response.body().asString());
     }
 }

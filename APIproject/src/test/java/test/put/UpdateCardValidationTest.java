@@ -20,23 +20,23 @@ public class UpdateCardValidationTest  extends BaseTest {
     @ArgumentsSource(AuthCardValidationScopeArgumentsProvider.class)
     public void checkUpdateCardWithInvalidAuth(AuthValidationArgumentsHolder validationArguments)
     {
-        Response response = BaseTest.requestWithoutAuth()
+        Response response = requestWithoutAuth()
                 .queryParams(validationArguments.getAuthParams())
-                .pathParam("id",CARD_ID_TO_UPDATE)
+                .pathParam("id", CARD_ID_TO_UPDATE)
                 .body(Map.of("name", "cardName1"))
                 .contentType(ContentType.JSON)
                 .put(UPDATE_CARD_URL);
         response
                 .then()
-                .statusCode(401)
-                .log().body();
+                .statusCode(401);
         Assertions.assertEquals(validationArguments.getErrorMessage(), response.body().asString());
     }
+
     @ParameterizedTest
     @ArgumentsSource(CardIdValidationArgumentProvider.class)
     public void checkUpdateCardWithInvalidId(CardIdValidationArgumentsHolder validationArguments)
     {
-        Response response = BaseTest.requestWithAuth()
+        Response response = requestWithAuth()
                 .pathParams(validationArguments.getPathParams())
                 .put(UPDATE_CARD_URL);
         response

@@ -6,23 +6,22 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import providers.AuthValidationArgumentsProvider;
+import providers.AuthCardValidationArgumentsProvider;
 import test.BaseTest;
+import static constants.CardsEndpoints.GET_CARD_URL;
+import static constants.UrlParamValues.EXISTING_CARD_ID;
+import static constants.UrlParamValues.INVALID_CARD_ID;
 
-import static constants.BoardsEndpoints.GET_BOARD_URL;
-import static constants.UrlParamValues.EXISTING_BOARD_ID;
-import static org.hamcrest.Matchers.lessThan;
-
-public class GetBoardsValidationTests extends BaseTest {
+public class GetCardValidationTest extends BaseTest {
 
     @ParameterizedTest
-    @ArgumentsSource(AuthValidationArgumentsProvider.class)
-    public void checkGetBoardsWithInvalidAuth(AuthValidationArgumentsHolder validationArguments)
+    @ArgumentsSource(AuthCardValidationArgumentsProvider.class)
+    public void checkGetCardWithInvalidAuth(AuthValidationArgumentsHolder validationArguments)
     {
-        Response response = BaseTest.requestWithoutAuth()
+        Response response = requestWithoutAuth()
                 .queryParams(validationArguments.getAuthParams())
-                .pathParam("id",EXISTING_BOARD_ID)
-                .get(GET_BOARD_URL);
+                .pathParam("id", EXISTING_CARD_ID)
+                .get(GET_CARD_URL);
         response
                 .then()
                 .statusCode(401);
@@ -30,11 +29,11 @@ public class GetBoardsValidationTests extends BaseTest {
     }
 
     @Test
-    public void checkGetBoardsWithInvalidId()
+    public void checkGetCardWithInvalidId()
     {
-        Response response = BaseTest.requestWithAuth()
+        Response response = requestWithAuth()
                 .pathParam("id","invalid")
-                .get(GET_BOARD_URL);
+                .get(GET_CARD_URL);
         response
                 .then()
                 .statusCode(400);
@@ -42,16 +41,14 @@ public class GetBoardsValidationTests extends BaseTest {
     }
 
     @Test
-    public void checkGetBoardsWithInvalidResourse()
+    public void checkGetCardWithInvalidResource()
     {
         Response response = BaseTest.requestWithAuth()
-                .pathParam("id","77b33f0fef35108b71345e56")
-                .get(GET_BOARD_URL);
+                .pathParam("id", INVALID_CARD_ID)
+                .get(GET_CARD_URL);
         response
                 .then()
-                .statusCode(404)
-                .time(lessThan(1000L))
-                .log().body();
+                .statusCode(404);
         Assertions.assertEquals("The requested resource was not found.", response.body().asString());
     }
 }

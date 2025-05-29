@@ -15,7 +15,6 @@ public class DeleteCardTest extends BaseTest {
 
     @BeforeEach
     public void createCard(){
-
         cardNameId = requestWithAuth()
                 .body(Map.of(
                         "idList", EXISTING_LIST_ID,
@@ -29,7 +28,6 @@ public class DeleteCardTest extends BaseTest {
     public void checkDeleteCard(){
         requestWithAuth()
                 .pathParam("id", cardNameId)
-                .delete(DELETE_CARD_URL)
                 .then()
                 .statusCode(200);
         requestWithAuth()

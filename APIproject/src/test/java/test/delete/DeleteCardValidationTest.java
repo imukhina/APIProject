@@ -19,9 +19,9 @@ public class DeleteCardValidationTest extends BaseTest {
     @ArgumentsSource(AuthCardValidationScopeArgumentsProvider.class)
     public void checkDeleteCardWithInvalidAuth(AuthValidationArgumentsHolder validationArguments)
     {
-        Response response = BaseTest.requestWithoutAuth()
+        Response response = requestWithoutAuth()
                 .queryParams(validationArguments.getAuthParams())
-                .pathParam("id",EXISTING_CARD_ID)
+                .pathParam("id", EXISTING_CARD_ID)
                 .contentType(ContentType.JSON)
                 .delete(DELETE_CARD_URL);
         response
@@ -34,7 +34,7 @@ public class DeleteCardValidationTest extends BaseTest {
     @ArgumentsSource(CardIdValidationArgumentProvider.class)
     public void checkDeleteCardWithInvalidId(CardIdValidationArgumentsHolder validationArguments)
     {
-        Response response = BaseTest.requestWithAuth()
+        Response response = requestWithAuth()
                 .pathParams(validationArguments.getPathParams())
                 .delete(DELETE_CARD_URL);
         response

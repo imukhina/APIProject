@@ -13,4 +13,7 @@ public class UrlParamValues {
 
     public static final String USER_NAME = "iraanischenko";
     public static final String EXISTING_LIST_ID = "67b33f1072bfba7883b51d70";
+
+    public static final String INVALID_BOARD_ID = "77b33f0fef35108b71345e56";
+    public static final String INVALID_CARD_ID = "77b33f10bce545854a096044";
 }

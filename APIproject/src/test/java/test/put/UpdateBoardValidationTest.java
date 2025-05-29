@@ -20,16 +20,15 @@ public class UpdateBoardValidationTest extends BaseTest {
     @ArgumentsSource(AuthValidationArgumentsProvider.class)
     public void checkUpdateBoardWithInvalidAuth(AuthValidationArgumentsHolder validationArguments)
     {
-        Response response = BaseTest.requestWithoutAuth()
+        Response response = requestWithoutAuth()
                 .queryParams(validationArguments.getAuthParams())
-                .pathParam("id",BOARD_ID_TO_UPDATE)
+                .pathParam("id", BOARD_ID_TO_UPDATE)
                 .body(Map.of("name", "boardName1"))
                 .contentType(ContentType.JSON)
                 .put(UPDATE_BOARD_URL);
         response
                 .then()
-                .statusCode(401)
-                .log().body();
+                .statusCode(401);
         Assertions.assertEquals(validationArguments.getErrorMessage(), response.body().asString());
     }
 
@@ -37,7 +36,7 @@ public class UpdateBoardValidationTest extends BaseTest {
     @ArgumentsSource(BoardIdValidationArgumentsProvider.class)
     public void checkUpdateBoardWithInvalidId(BoardIdValidationArgumentsHolder validationArguments)
     {
-        Response response = BaseTest.requestWithAuth()
+        Response response = requestWithAuth()
                 .pathParams(validationArguments.getPathParams())
                 .put(UPDATE_BOARD_URL);
         response

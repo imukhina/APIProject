@@ -38,7 +38,7 @@ public class CreateCardValidationTest extends BaseTest {
     public void checkCreateCardWithInvalidName(CardBodyArgumentsHolder bodyParams)
     {
         Response response = requestWithoutAuth()
-                .body(bodyParams)
+                .body(bodyParams.getBodyParams())
                 .contentType(ContentType.JSON)
                 .post(CREATE_CARD_URL);
         response

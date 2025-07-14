@@ -1,5 +1,7 @@
 package constants;
 
+import java.util.Map;
+
 public class UrlParamValues {
 
     public static final String VALID_KEY = "3a4a0cd0002ce19114a124b7861eaeae";
@@ -16,4 +18,9 @@ public class UrlParamValues {
 
     public static final String INVALID_BOARD_ID = "77b33f0fef35108b71345e56";
     public static final String INVALID_CARD_ID = "77b33f10bce545854a096044";
+
+    public static final Map<String, String> AUTH_QUERY_PARAMS = Map.of(
+            "key", VALID_KEY,
+            "token", VALID_TOKEN
+    );
 }

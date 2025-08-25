@@ -6,7 +6,6 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeAll;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

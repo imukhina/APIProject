@@ -1,6 +1,5 @@
 package providers;
 
-import arguments.holders.BoardIdValidationArgumentsHolder;
 import arguments.holders.CardIdValidationArgumentsHolder;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;

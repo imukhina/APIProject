@@ -15,10 +15,11 @@ import org.junit.jupiter.api.Assertions;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import static constants.UrlParamValues.AUTH_QUERY_PARAMS;
 import static org.hamcrest.Matchers.equalTo;
 
-public class TrelloApiSteps {
+public class TrelloApiActionSteps {
 
     private RequestSpecification request;
     private Response response;
@@ -48,6 +49,7 @@ public class TrelloApiSteps {
         }
         request = request.pathParams(pathParams);
     }
+
     @And("the request has query params:")
     public void theRequestHasQueryParams(DataTable dataTable) {
         Map<String, String> queryParams = new HashMap<>();
@@ -55,7 +57,7 @@ public class TrelloApiSteps {
         for (Map<String, String> row : rows) {
             queryParams.put(row.get("name"), row.get("value"));
         }
-        queryParams.entrySet().removeIf(e->e.getValue()==null);
+        queryParams.entrySet().removeIf(e -> e.getValue() == null);
         request = request.queryParams(queryParams);
     }
 
@@ -70,24 +72,6 @@ public class TrelloApiSteps {
         }
     }
 
-    @Then("the response status code is {int}")
-    public void theResponseStatusCodeIs(int expectedStatusCode) {
-        response.then().statusCode(expectedStatusCode);
-    }
-
-    @Then("body value has the following values by paths:")
-    public void bodyValueByPathIsEqualTo(DataTable dataTable) {
-        List<Map<String, String>> rows = dataTable.asMaps();
-        for (Map<String, String> row : rows) {
-            response.then().body(row.get("path"),equalTo(row.get("expected_value")));
-        }
-
-    }
-
-    @And("the response matches '{}' schema")
-    public void theResponseMatchesSchema(String schemaName) {
-        response.then().body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schemas/" + schemaName));
-    }
 
     @Given("a request without authorization")
     public void aRequestWithoutAuthorization() {
@@ -95,8 +79,13 @@ public class TrelloApiSteps {
     }
 
 
-    @And("the response body is equal to {string}")
-    public void theResponseBodyIsEqualTo(String expectedValue) {
-        Assertions.assertEquals(expectedValue, response.body().asString());
+    @And("the request has body params:")
+    public void theRequestHasBodyParams(DataTable dataTable) {
+        request = request.body(dataTable.asMap());
+    }
+
+    @And("the request has headers:")
+    public void theRequestHasHeaders(DataTable dataTable) {
+        request = request.headers(dataTable.asMap());
     }
 }

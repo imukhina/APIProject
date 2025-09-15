@@ -4,40 +4,26 @@ import io.cucumber.core.options.CurlOption;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.RestAssured;
-import io.restassured.module.jsv.JsonSchemaValidator;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
-import org.junit.jupiter.api.Assertions;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static constants.UrlParamValues.AUTH_QUERY_PARAMS;
-import static org.hamcrest.Matchers.equalTo;
+import static utils.AuthorizationRequestProvider.requestWithAuth;
+import static utils.AuthorizationRequestProvider.requestWithoutAuth;
 
 public class TrelloApiActionSteps {
 
-    private RequestSpecification request;
-    private Response response;
+    private final ScenarioContext scenarioContext;
 
-    private static RequestSpecification requestWithAuth() {
-        return requestWithoutAuth()
-                .queryParams(AUTH_QUERY_PARAMS)
-                .header("Accept", "application/json");
+    public TrelloApiActionSteps(ScenarioContext scenarioContext){
+
+        this.scenarioContext = scenarioContext;
+
     }
 
-    private static RequestSpecification requestWithoutAuth() {
-        RestAssured.baseURI = "https://api.trello.com/1";
-        return RestAssured.given();
-    }
-
-    @Given("a request with authorization")
-    public void aRequestWithAuthorization() {
-        request = requestWithAuth();
+    @Given("a request {with} authorization")
+    public void aRequestWithAuthorization(boolean withAuth) {
+        scenarioContext.setRequest(withAuth ? requestWithAuth():requestWithoutAuth());
     }
 
     @And("the request has path params:")
@@ -47,7 +33,7 @@ public class TrelloApiActionSteps {
         for (Map<String, String> row : rows) {
             pathParams.put(row.get("name"), row.get("value"));
         }
-        request = request.pathParams(pathParams);
+        scenarioContext.setRequest(scenarioContext.getRequest().pathParams(pathParams));
     }
 
     @And("the request has query params:")
@@ -58,34 +44,27 @@ public class TrelloApiActionSteps {
             queryParams.put(row.get("name"), row.get("value"));
         }
         queryParams.entrySet().removeIf(e -> e.getValue() == null);
-        request = request.queryParams(queryParams);
+        scenarioContext.setRequest(scenarioContext.getRequest().queryParams(queryParams));
     }
 
     @When("the '{}' request is sent to {string} endpoint")
     public void theRequestIsSentToEndpoint(CurlOption.HttpMethod method, String endpoint) {
         switch (method) {
-            case GET -> response = request.get(endpoint);
-            case POST -> response = request.post(endpoint);
-            case PUT -> response = request.put(endpoint);
-            case DELETE -> response = request.delete(endpoint);
+            case GET -> scenarioContext.setResponse(scenarioContext.getRequest().get(endpoint));
+            case POST -> scenarioContext.setResponse(scenarioContext.getRequest().post(endpoint));
+            case PUT -> scenarioContext.setResponse(scenarioContext.getRequest().put(endpoint));
+            case DELETE -> scenarioContext.setResponse(scenarioContext.getRequest().delete(endpoint));
             default -> throw new RuntimeException();
         }
     }
 
-
-    @Given("a request without authorization")
-    public void aRequestWithoutAuthorization() {
-        request = requestWithoutAuth();
-    }
-
-
     @And("the request has body params:")
     public void theRequestHasBodyParams(DataTable dataTable) {
-        request = request.body(dataTable.asMap());
+        scenarioContext.setRequest(scenarioContext.getRequest().body(dataTable.asMap()));
     }
 
     @And("the request has headers:")
     public void theRequestHasHeaders(DataTable dataTable) {
-        request = request.headers(dataTable.asMap());
+        scenarioContext.setRequest(scenarioContext.getRequest().headers(dataTable.asMap()));
     }
 }

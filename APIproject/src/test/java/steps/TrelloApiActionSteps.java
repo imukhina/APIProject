@@ -5,9 +5,11 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import static utils.AuthorizationRequestProvider.requestWithAuth;
 import static utils.AuthorizationRequestProvider.requestWithoutAuth;
 
@@ -15,15 +17,14 @@ public class TrelloApiActionSteps {
 
     private final ScenarioContext scenarioContext;
 
-    public TrelloApiActionSteps(ScenarioContext scenarioContext){
+    public TrelloApiActionSteps(ScenarioContext scenarioContext) {
 
         this.scenarioContext = scenarioContext;
-
     }
 
     @Given("a request {with} authorization")
     public void aRequestWithAuthorization(boolean withAuth) {
-        scenarioContext.setRequest(withAuth ? requestWithAuth():requestWithoutAuth());
+        scenarioContext.setRequest(withAuth ? requestWithAuth() : requestWithoutAuth());
     }
 
     @And("the request has path params:")
@@ -66,5 +67,11 @@ public class TrelloApiActionSteps {
     @And("the request has headers:")
     public void theRequestHasHeaders(DataTable dataTable) {
         scenarioContext.setRequest(scenarioContext.getRequest().headers(dataTable.asMap()));
+    }
+
+    @And("the board id from the response is remembered")
+    public void theBoardIdFromTheResponseIsRemembered() {
+        String createdBoardId = scenarioContext.getResponse().body().jsonPath().get("id");
+        scenarioContext.setBoardId(createdBoardId);
     }
 }

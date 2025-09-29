@@ -8,6 +8,7 @@ public class ScenarioContext {
     private RequestSpecification request;
     private Response response;
     private String boardId;
+    private String cardId;
 
     public RequestSpecification getRequest() {
         return request;
@@ -31,5 +32,12 @@ public class ScenarioContext {
 
     public void setBoardId(String boardId) {
         this.boardId = boardId;
+    }
+    public String getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(String cardId) {
+        this.cardId = cardId;
     }
 }

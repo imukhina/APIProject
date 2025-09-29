@@ -11,7 +11,7 @@ Feature: Update Card
       | name | cardName |
     And the request has headers:
       | Content-Type | application/json |
-    When the 'PUT' request is sent to '/cards/{id}' endpoint
+    When the 'PUT' request is sent to 'UPDATE_A_CARD' endpoint
     Then the response status code is 200
     And body value has the following values by paths:
       | path | expected_value |
@@ -21,7 +21,7 @@ Feature: Update Card
     And the request has path params:
       | name | value                    |
       | id   | 67b33f101a822796158523d5 |
-    When the 'GET' request is sent to '/cards/{id}' endpoint
+    When the 'GET' request is sent to 'UPDATE_A_CARD' endpoint
     Then the response status code is 200
     And body value has the following values by paths:
       | path | expected_value |

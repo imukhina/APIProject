@@ -13,7 +13,7 @@ Feature: Update Board Validation
     And the request has query params:
       | key   | <key>   |
       | token | <token> |
-    When the 'PUT' request is sent to '/boards/{id}' endpoint
+    When the 'PUT' request is sent to 'UPDATE_A_BOARD' endpoint
     Then the response status code is 401
     And the response body is equal to '{"message":"missing scopes"}'
 
@@ -28,7 +28,7 @@ Feature: Update Board Validation
     And the request has path params:
       | name | value      |
       | id   | <id_value> |
-    When the 'PUT' request is sent to '/boards/{id}' endpoint
+    When the 'PUT' request is sent to 'UPDATE_A_BOARD' endpoint
     Then the response status code is <status_code>
     And the response body is equal to '<error_message>'
 

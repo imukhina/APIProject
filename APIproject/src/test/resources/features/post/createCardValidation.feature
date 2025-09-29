@@ -1,16 +1,17 @@
-Feature: Create Board Validation
-  I want to validate a creation of one board
+Feature: Create Card Validation
+  I want to validate a creation of one card
 
-  Scenario Outline: Check Create Board With Invalid Auth
+  Scenario Outline: Check Create Card With Invalid Auth
     Given a request without authorization
     And the request has query params:
       | key   | <key>   |
       | token | <token> |
     And the request has body params:
-      | name | fdhgshsfhsftghf |
+      | idList | 67b33f1072bfba7883b51d70 |
+      | name   | cardName123              |
     And the request has headers:
       | Content-Type | application/json |
-    When the 'POST' request is sent to 'CREATE_A_BOARD' endpoint
+    When the 'POST' request is sent to 'CREATE_A_CARD' endpoint
     Then the response status code is 401
     And the response body is equal to '{"message":"missing scopes"}'
 
@@ -20,17 +21,19 @@ Feature: Create Board Validation
       | 3a4a0cd0002ce19114a124b7861eaeae |                                                                              |
       |                                  | ATTA98a6b05484cb89c3777111af6cf67f9a5f46e24fbccee3c82512431e5646912e75406C2B |
 
-  Scenario Outline: Check Create Board With Invalid Name
+  Scenario Outline: Check Create Card With Invalid Id List
     Given a request with authorization
     And the request has body params:
-      | <body_key> | <body_value> |
+      | idList | <idList_value> |
+      | name   | <name_value>   |
     And the request has headers:
       | Content-Type | application/json |
-    When the 'POST' request is sent to 'CREATE_A_BOARD' endpoint
-    Then the response status code is <status_code>
-    And the response body is equal to '<error_message>'
+    When the 'POST' request is sent to 'CREATE_A_CARD' endpoint
+    Then the response status code is 400
+    And the response body is equal to 'invalid value for idList'
 
     Examples:
-      | body_key | body_value | status_code | error_message                                        |
-      | name     |            | 400         | {"message":"invalid value for name","error":"ERROR"} |
-      | ''       | ''         | 400         | {"message":"invalid value for name","error":"ERROR"}               |
+      | idList                   | name        |
+      | 17b33f1072bfba7883b51d70 | dgdfgdfgdfg |
+      |                          | jkhkhjhkj   |
+      | !@%&^&(*)(_+_            | jkhkhjhkj   |

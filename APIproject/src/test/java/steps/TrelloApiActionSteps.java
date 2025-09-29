@@ -1,5 +1,6 @@
 package steps;
 
+import constants.Endpoint;
 import io.cucumber.core.options.CurlOption;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -48,13 +49,14 @@ public class TrelloApiActionSteps {
         scenarioContext.setRequest(scenarioContext.getRequest().queryParams(queryParams));
     }
 
-    @When("the '{}' request is sent to {string} endpoint")
-    public void theRequestIsSentToEndpoint(CurlOption.HttpMethod method, String endpoint) {
+    @When("the '{}' request is sent to '{endpoint}' endpoint")
+    public void theRequestIsSentToEndpoint(CurlOption.HttpMethod method, Endpoint endpoint) {
+        String url = endpoint.getUrl();
         switch (method) {
-            case GET -> scenarioContext.setResponse(scenarioContext.getRequest().get(endpoint));
-            case POST -> scenarioContext.setResponse(scenarioContext.getRequest().post(endpoint));
-            case PUT -> scenarioContext.setResponse(scenarioContext.getRequest().put(endpoint));
-            case DELETE -> scenarioContext.setResponse(scenarioContext.getRequest().delete(endpoint));
+            case GET -> scenarioContext.setResponse(scenarioContext.getRequest().get(url));
+            case POST -> scenarioContext.setResponse(scenarioContext.getRequest().post(url));
+            case PUT -> scenarioContext.setResponse(scenarioContext.getRequest().put(url));
+            case DELETE -> scenarioContext.setResponse(scenarioContext.getRequest().delete(url));
             default -> throw new RuntimeException();
         }
     }
@@ -73,5 +75,11 @@ public class TrelloApiActionSteps {
     public void theBoardIdFromTheResponseIsRemembered() {
         String createdBoardId = scenarioContext.getResponse().body().jsonPath().get("id");
         scenarioContext.setBoardId(createdBoardId);
+    }
+
+    @And("the card id from the response is remembered")
+    public void theCardIdFromTheResponseIsRemembered() {
+        String createdCardId = scenarioContext.getResponse().body().jsonPath().get("id");
+        scenarioContext.setCardId(createdCardId);
     }
 }

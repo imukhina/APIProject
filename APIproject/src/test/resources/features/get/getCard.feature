@@ -6,7 +6,7 @@ Feature: Get Card
     And the request has path params:
       | name | value                    |
       | id   | 67b33f0fef35108b71345e56 |
-    When the 'GET' request is sent to '/boards/{id}/lists' endpoint
+    When the 'GET' request is sent to 'GET_ALL_LISTS' endpoint
     Then the response status code is 200
 
   Scenario: Check Get Cards
@@ -17,7 +17,7 @@ Feature: Get Card
     And the request has query params:
       | name   | value   |
       | fields | id,name |
-    When the 'GET' request is sent to '/lists/{id}/cards' endpoint
+    When the 'GET' request is sent to 'GET_ALL_CARDS' endpoint
     Then the response status code is 200
 
   Scenario: Check Get Card
@@ -28,7 +28,7 @@ Feature: Get Card
     And the request has query params:
       | name   | value   |
       | fields | id,name |
-    When the 'GET' request is sent to '/cards/{id}' endpoint
+    When the 'GET' request is sent to 'GET_A_CARD' endpoint
     Then the response status code is 200
     And body value has the following values by paths:
       | path | expected_value |

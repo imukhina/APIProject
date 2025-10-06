@@ -33,7 +33,9 @@ public class TrelloApiActionSteps {
         Map<String, String> pathParams = new HashMap<>();
         List<Map<String, String>> rows = dataTable.asMaps();
         for (Map<String, String> row : rows) {
-            pathParams.put(row.get("name"), row.get("value"));
+            String rowValue = row.get("value");
+            String value = rowValue.equals("created_board_id")? scenarioContext.getBoardId():rowValue;
+            pathParams.put(row.get("name"),value);
         }
         scenarioContext.setRequest(scenarioContext.getRequest().pathParams(pathParams));
     }

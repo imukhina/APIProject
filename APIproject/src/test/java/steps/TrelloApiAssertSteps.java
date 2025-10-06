@@ -4,13 +4,10 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.restassured.module.jsv.JsonSchemaValidator;
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
-
 import java.util.List;
 import java.util.Map;
-
 import static org.hamcrest.Matchers.equalTo;
 
 public class TrelloApiAssertSteps {
@@ -20,7 +17,6 @@ public class TrelloApiAssertSteps {
     public TrelloApiAssertSteps(ScenarioContext scenarioContext) {
 
         this.scenarioContext = scenarioContext;
-
     }
 
     @Then("the response status code is {int}")
@@ -51,6 +47,14 @@ public class TrelloApiAssertSteps {
         List<Map<String, String>> rows = dataTable.asMaps();
         for (Map<String, String> row : rows) {
             scenarioContext.getResponse().then().body(row.get("path"), Matchers.hasItem(row.get("expected_value")));
+        }
+    }
+    @And("the response body doesn't have item:")
+    public void theResponseBodyDoesntHaveAnyItem(DataTable dataTable) {
+        for(Map.Entry<String, String> row : dataTable.asMap().entrySet()){
+            String rowValue = row.getValue();
+            String expectedValue = rowValue.equals("created_board_id")? scenarioContext.getBoardId():rowValue;
+            scenarioContext.getResponse().then().body("id", Matchers.not(Matchers.hasItem(expectedValue)));
         }
     }
 }
